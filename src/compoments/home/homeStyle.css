@@ -1,0 +1,72 @@
+.home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .home-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #f3f4f6;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .header-logo {
+    width: 300px;
+    height:100px;
+    margin-right: 20px;
+  }
+  
+  .header-title {
+    font-size: 50px;
+    color: #25238b;
+    font-weight: bold;
+  }
+  
+  .home-content {
+    display: flex;
+    flex: 1;
+  }
+  
+  .home-sidebar {
+    width: 250px;
+    background-color: #e5e7eb;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+  }
+  
+  .home-main {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+  }
+  
+  .navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .nav-btn {
+    padding: 10px 20px;
+    background-color: #8b5cf6;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .nav-btn:hover {
+    background-color: #7c3aed;
+  }
+  
