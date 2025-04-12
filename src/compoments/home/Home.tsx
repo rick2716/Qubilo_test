@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import Card from '../card/Card';
 import './homeStyle.css';
 import SidebarFilter from '../sidebarFilter/SidebarFilter';
+import { Link } from 'react-router-dom';
 
 interface Character {
     id: number;
@@ -146,8 +147,13 @@ const Home = () => {
     return (
         <div className="home-container">
             <div className="home-header">
-                <img src="https://shop.warnerbros.co.uk/cdn/shop/files/Rick_and_Morty_Logo_Lockup_1.png?v=1697228078" alt="logo" className="header-logo" />
-                <h1 className="header-title">Character List</h1>
+                <div className="header-content">
+                    <img src="https://shop.warnerbros.co.uk/cdn/shop/files/Rick_and_Morty_Logo_Lockup_1.png?v=1697228078" alt="logo" className="header-logo" />
+                    <h1 className="header-title">Character List</h1>
+                </div>
+                <button className="nav-btn">
+                    <Link to="/">Exit</Link>
+                </button>
             </div>
 
             <div className="home-content">

@@ -7,10 +7,16 @@
   .home-header {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 20px;
     background-color: #f3f4f6;
     border-bottom: 1px solid #ccc;
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .header-logo {
