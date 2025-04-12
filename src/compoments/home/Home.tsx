@@ -24,14 +24,17 @@ interface Filters {
 }
 
 const Home = () => {
+    const savedFilters = JSON.parse(localStorage.getItem('filters') || 'null');
+    const savedPageIndex = JSON.parse(localStorage.getItem('pageIndex') || '0');
+
     const [characters, setCharacters] = useState<Character[]>([]);
-    const [filters, setFilters] = useState<Filters>({
+    const [filters, setFilters] = useState<Filters>(savedFilters || {
         status: '',
         gender: '',
         species: '',
-        type: '',
+        type: ''
     });
-    const [pageIndex, setPageIndex] = useState(0);
+    const [pageIndex, setPageIndex] = useState<number>(savedPageIndex || 0);
     const [totalCharacters, setTotalCharacters] = useState(0);
 
     const charactersPerPage = 9;
@@ -55,9 +58,9 @@ const Home = () => {
             if (isFiltering) {
                 let baseUrl = 'https://rickandmortyapi.com/api/character/?';
                 Object.entries(filters).forEach(([key, value]) => {
-                    if (value.trim()){
+                    if (value.trim()) {
                         baseUrl += `${key}=${encodeURIComponent(value)}&`;
-                    } 
+                    }
                 });
 
                 try {
@@ -111,22 +114,33 @@ const Home = () => {
         fetchCharacters();
     }, [filters, pageIndex, isFiltering]);
 
+    // para la permancencia de datos
+    useEffect(() => {
+        const saveState = () => {
+            localStorage.setItem('filters', JSON.stringify(filters));
+            localStorage.setItem('pageIndex', JSON.stringify(pageIndex));
+        };
+
+        saveState();
+    }, [filters, pageIndex]);
+
+
     const handleFilterChange = (field: keyof Filters, value: string) => {
-        setPageIndex(0); 
+        setPageIndex(0);
         setFilters((prev) => ({ ...prev, [field]: value }));
     };
 
     const handlePrev = () => {
-        if (pageIndex > 0){
+        if (pageIndex > 0) {
             setPageIndex((prev) => prev - 1);
-        } 
+        }
     };
 
     const handleNext = () => {
         const maxPages = Math.ceil(totalCharacters / charactersPerPage);
-        if (pageIndex < maxPages - 1){
+        if (pageIndex < maxPages - 1) {
             setPageIndex((prev) => prev + 1);
-        } 
+        }
     };
 
     return (
