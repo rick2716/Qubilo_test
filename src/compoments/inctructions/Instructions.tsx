@@ -48,9 +48,9 @@ const Instructions = () => {
                         ANS: AQUI VA LA RESPUESTA A LA PREGUNTA ESA
                     </li>
                 </ul>
-                <button className="btn">
-                    <Link to="/home">Enter the App</Link>
-                </button>
+                <Link to="/home" className="btn-portal">
+                    <span>Enter the App</span>
+                </Link>
             </div>
         </div>
     );

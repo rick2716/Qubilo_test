@@ -172,7 +172,6 @@ const Home = () => {
                                 gender={character.gender}
                                 type={character.type}
                                 origin={character.origin.name}
-                                id={character.id}
                             />
                         ))}
                     </div>

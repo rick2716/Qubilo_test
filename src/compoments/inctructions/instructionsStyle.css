@@ -1,9 +1,20 @@
-.btn {
-    margin-top: 30px;
-    padding: 10px 20px;
-    background-color: #8b5cf6;
-    color: white;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+.btn-portal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('../../assets/portalImg.png');
+  background-size: cover;
+  background-position: center;
+  width: 200px;
+  height: 200px;
+  color: #fff;
+  text-shadow: 2px 2px 4px black;
+  font-weight: bold;
+  font-size: 20px;
+  border: none;
+  transition: transform 0.3s ease;
+}
+
+.btn-portal:hover {
+  transform: scale(1.05);
+}

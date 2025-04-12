@@ -9,10 +9,9 @@ interface CardProps {
     gender: string;
     type?: string;
     origin: string;
-    id: number;
 }
 
-const Card: React.FC<CardProps> = ({ imageSrc, name, status, species, gender, type, origin, id }) => {
+const Card: React.FC<CardProps> = ({ imageSrc, name, status, species, gender, type, origin }) => {
     return (
         <div className="card-container">
             <div className="card">
@@ -21,10 +20,6 @@ const Card: React.FC<CardProps> = ({ imageSrc, name, status, species, gender, ty
                 </div>
 
                 <div className="card-details">
-                    <div className="card-detail-row">
-                        <h3>Number#</h3>
-                        <p>{id}</p>
-                    </div>
                     <div className="card-detail-row">
                         <h3>Name</h3>
                         <p>{name}</p>

@@ -9,8 +9,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px;
-    background-color: #f3f4f6;
-    border-bottom: 1px solid #ccc;
+    background-color: #161622;
   }
 
   .header-content {
@@ -27,7 +26,7 @@
   
   .header-title {
     font-size: 50px;
-    color: #25238b;
+    color: #01afc8;
     font-weight: bold;
   }
   
@@ -38,9 +37,8 @@
   
   .home-sidebar {
     width: 250px;
-    background-color: #e5e7eb;
+    background-color: #161622;
     padding: 10px;
-    border-right: 1px solid #ccc;
   }
   
   .home-main {
@@ -49,6 +47,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #1e1e2f;
   }
   
   .card-grid {
@@ -65,14 +64,14 @@
   
   .nav-btn {
     padding: 10px 20px;
-    background-color: #8b5cf6;
-    color: white;
+    background-color: #cadd5d;
+    color: #1a1a1a;
     border-radius: 5px;
     font-weight: bold;
     cursor: pointer;
   }
   
   .nav-btn:hover {
-    background-color: #7c3aed;
+    background-color: #e4f78e;
   }
   
