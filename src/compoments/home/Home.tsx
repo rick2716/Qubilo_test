@@ -16,64 +16,117 @@ interface Character {
     image: string;
 }
 
-
+interface Filters {
+    status: string;
+    gender: string;
+    species: string;
+    type: string;
+}
 
 const Home = () => {
     const [characters, setCharacters] = useState<Character[]>([]);
+    const [filters, setFilters] = useState<Filters>({
+        status: '',
+        gender: '',
+        species: '',
+        type: '',
+    });
+    const [pageIndex, setPageIndex] = useState(0);
     const [totalCharacters, setTotalCharacters] = useState(0);
-    const [startId, setStartId] = useState(1);
 
     const charactersPerPage = 9;
 
-    const endId = Math.min(startId + charactersPerPage - 1, totalCharacters);
+    const isFiltering = Object.values(filters).some((val) => val.trim() !== '');
 
-    // Traer el total de personajes una sola vez
+    // toma el total de personajes
     useEffect(() => {
-        const fetchTotal = async () => {
-            try {
-                const response = await fetch("https://rickandmortyapi.com/api/character");
-                const data = await response.json();
-                setTotalCharacters(data.info.count);
-            } catch (error) {
-                console.error('Error al obtener total de personajes:', error);
-            }
-        };
-
-        fetchTotal();
-    }, []);
-
-    // Cada vez que cambia el rango de IDs
-    useEffect(() => {
-        const fetchByIdRange = async () => {
-            const ids = [];
-            for (let i = 0; i < 9; i++) {
-                ids.push(startId + i);
-            }
-
-            try {
-                const response = await fetch(`https://rickandmortyapi.com/api/character/${ids.join(",")}`);
-                const data = await response.json();
-                setCharacters(Array.isArray(data) ? data : [data]);
-            } catch (error) {
-                console.error('Error al cargar personajes por ID:', error);
-            }
-        };
-
-        if (totalCharacters > 0) {
-            fetchByIdRange();
+        if (!isFiltering) {
+            fetch('https://rickandmortyapi.com/api/character')
+                .then((res) => res.json())
+                .then((data) => {
+                    setTotalCharacters(data.info.count);
+                });
         }
-    }, [startId, endId, totalCharacters]);
+    }, [isFiltering]);
+
+    // Fetch de los personajes por filtro o ID
+    useEffect(() => {
+        const fetchCharacters = async () => {
+            if (isFiltering) {
+                let baseUrl = 'https://rickandmortyapi.com/api/character/?';
+                Object.entries(filters).forEach(([key, value]) => {
+                    if (value.trim()){
+                        baseUrl += `${key}=${encodeURIComponent(value)}&`;
+                    } 
+                });
+
+                try {
+                    const firstRes = await fetch(baseUrl);
+                    const firstData = await firstRes.json();
+
+                    if (!firstData.results || !firstData.info) {
+                        setCharacters([]);
+                        setTotalCharacters(0);
+                        return;
+                    }
+
+                    const totalPages = firstData.info.pages;
+                    const allPagesUrls = [];
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        allPagesUrls.push(`${baseUrl}page=${i}`);
+                    }
+
+                    const allResponses = await Promise.all(allPagesUrls.map((url) => fetch(url)));
+                    const allJsons = await Promise.all(allResponses.map((res) => res.json()));
+
+                    const allCharacters = allJsons.flatMap((data) => data.results);
+
+                    setTotalCharacters(allCharacters.length);
+                    const start = pageIndex * charactersPerPage;
+                    const end = start + charactersPerPage;
+                    setCharacters(allCharacters.slice(start, end));
+                } catch (err) {
+                    console.error('Error cargando personajes con filtros:', err);
+                }
+            } else {
+                // Modo normal por ID
+                const startId = pageIndex * charactersPerPage + 1;
+                const ids: number[] = [];
+
+                for (let i = 0; i < charactersPerPage; i++) {
+                    ids.push(startId + i);
+                }
+
+                try {
+                    const res = await fetch(`https://rickandmortyapi.com/api/character/${ids.join(',')}`);
+                    const data = await res.json();
+                    setCharacters(Array.isArray(data) ? data : [data]);
+                } catch (err) {
+                    console.error('Error cargando por ID:', err);
+                }
+            }
+        };
+
+        fetchCharacters();
+    }, [filters, pageIndex, isFiltering]);
+
+    const handleFilterChange = (field: keyof Filters, value: string) => {
+        setPageIndex(0); 
+        setFilters((prev) => ({ ...prev, [field]: value }));
+    };
 
     const handlePrev = () => {
-        if (startId > 1) {
-            setStartId((prev) => Math.max(prev - charactersPerPage, 1));
-        }
+        if (pageIndex > 0){
+            setPageIndex((prev) => prev - 1);
+        } 
     };
 
     const handleNext = () => {
-        if (startId + charactersPerPage <= totalCharacters) {
-            setStartId((prev) => prev + charactersPerPage);
-        }
+        const maxPages = Math.ceil(totalCharacters / charactersPerPage);
+        if (pageIndex < maxPages - 1){
+            setPageIndex((prev) => prev + 1);
+        } 
     };
 
     return (
@@ -85,7 +138,7 @@ const Home = () => {
 
             <div className="home-content">
                 <aside className="home-sidebar">
-                    <SidebarFilter />
+                    <SidebarFilter filters={filters} onChange={handleFilterChange} />
                 </aside>
                 <div className="home-main">
                     <div className="card-grid">
@@ -104,10 +157,14 @@ const Home = () => {
                         ))}
                     </div>
                     <div className="navigation-buttons">
-                        <button className="nav-btn" onClick={handlePrev} disabled={startId === 1}>
+                        <button className="nav-btn" onClick={handlePrev} disabled={pageIndex === 0}>
                             Anterior
                         </button>
-                        <button className="nav-btn" onClick={handleNext} disabled={endId >= totalCharacters}>
+                        <button
+                            className="nav-btn"
+                            onClick={handleNext}
+                            disabled={(pageIndex + 1) * charactersPerPage >= totalCharacters}
+                        >
                             Siguiente
                         </button>
                     </div>
