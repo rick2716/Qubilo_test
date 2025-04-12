@@ -45,7 +45,18 @@ const Instructions = () => {
                         render them with out performance issues?
                     </li>
                     <li>
-                        ANS: AQUI VA LA RESPUESTA A LA PREGUNTA ESA
+                        <p>
+                            <b>ANS:</b> Rendering a million of these cards would significantly impact the performance
+                            of the web app. The UI would render slowly, user interactions would lag, and the overall 
+                            user experience would be bad and slower. Additionally, memory consumption would 
+                            increase, and in the worst case, the browser could crash.
+                        </p>
+                        <p>
+                            A solution is to implement "lazy loading" to progressively rendering cards as the user scrolls. 
+                            This can be done using the useRef hook to track the position of elements on screen to load more 
+                            cards when needed. Also, useMemo can be used to memorize already rendered components and 
+                            avoid re-renders, improving performance.
+                        </p>
                     </li>
                 </ul>
                 <Link to="/home" className="btn-portal">
